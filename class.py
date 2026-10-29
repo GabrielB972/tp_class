@@ -91,3 +91,39 @@ assert len(other) == 0
 print("Ca marche")    
 
 ##La Classe Student
+from collections import defaultdict
+
+class Student :
+    def __init__(self,first_name:str,last_name:str):
+        self.first_name=first_name
+        self.last_name=last_name
+        self.grades={}
+
+    def add_grade(self,course:str,grade:float):
+        if grade>=0 and grade <=20 :
+            if course in self.grades :            ##Je n'ai pas réussi à faire marcher defaultdict donc c'est une version à la main 
+                self.grades[course].append(grade)
+            else :
+                self.grades[course]=[grade]
+
+    def followed_topics(self):
+        l=[]
+        for k in self.grades :
+            l.append(k)
+        return l    
+    
+    def __repr__(self):
+        return f"Student({self.first_name} {self.last_name}, {self.grades})"  
+
+
+try:
+    student = Student("Achille", "Talon")
+    student.add_grade("History", 10.)
+    topics = student.followed_topics()
+    if len(topics) != 1 or "History" not in topics:
+        raise Exception(f"Expecting ['History'] got {topics}")
+except Exception as e:
+    print('OOPS - There is an issue in your followed_topics method')
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works !')
