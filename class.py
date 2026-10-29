@@ -143,3 +143,40 @@ student = Student("Albert", "Einstein")
 student.add_grade("Mathematics", 12.80)
 student.add_grade("Scubadiving", 12.50)
 report = student.report()
+
+##La classe Classe
+class Classe :
+    def __init__(self,classname:str):
+        self.classname=classname
+        self.student={}
+
+    def add_student(self,student:Student):
+        self.student[student]='' #Une clé de dictionnaire est rapidement accessible, cette commande créer un emplacement et associe la chaîne vide à l'emplacement
+
+    def __len__(self):
+        return len(self.student)
+
+    def get_student(self,first_name:str,last_name:str):
+        for student in self.student :
+            if student.first_name==first_name and student.last_name==last_name:
+                return student
+        return    
+
+    def __repr__(self):
+        return f"Classe({self.classname}, Students: {self.student!r})" 
+
+# pour tester
+
+try:
+    classe = Classe("P20")
+    student = Student("Matthieu", "Mazière")
+    classe.add_student(student)
+    new_student = classe.get_student("Matthieu", "Mazière")
+    assert student is new_student
+    new_student = classe.get_student("Jérôme", "Adnot")
+    assert new_student is None
+except Exception as e:
+    print("OOPS - Something's wrong")
+    print(f"Error message : {e}")
+else:
+    print('Congrats ! Your implementation works !')
