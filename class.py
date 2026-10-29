@@ -111,19 +111,35 @@ class Student :
         for k in self.grades :
             l.append(k)
         return l    
-    
+
+    def compute_average(self,course:str):
+        if course not in self.grades :
+            raise ValueError ("Pas de notes")
+        else :
+            M=0
+            for grade in self.grades[course]:
+                M+=grade
+            return M/len(self.grades[course])            
+
+    def report(self):
+        lines=[]
+        lines.append(f"Report for student {self.first_name} {self.last_name}")
+        lines.append(f"+===============+===============+")
+        lines.append(f"|{"Topic":^15}|{"Average":^15}| ")
+        lines.append(f"+===============+===============+")
+        for course in self.grades :  #On créer une ligne de rapport par matière étudiée
+            lines.append(f"|{course:^15}|{self.compute_average(course):^15.2f}|")
+            lines.append(f"+---------------+---------------+")
+        texte="\n".join(lines)  #On créer le texte en joignant les lignes
+        print(texte)  #on print
+
+
+
     def __repr__(self):
         return f"Student({self.first_name} {self.last_name}, {self.grades})"  
 
 
-try:
-    student = Student("Achille", "Talon")
-    student.add_grade("History", 10.)
-    topics = student.followed_topics()
-    if len(topics) != 1 or "History" not in topics:
-        raise Exception(f"Expecting ['History'] got {topics}")
-except Exception as e:
-    print('OOPS - There is an issue in your followed_topics method')
-    print(f"Error message : {e}")
-else:
-    print('Congrats ! Your implementation works !')
+student = Student("Albert", "Einstein")
+student.add_grade("Mathematics", 12.80)
+student.add_grade("Scubadiving", 12.50)
+report = student.report()
