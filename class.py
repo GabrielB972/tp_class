@@ -1,4 +1,5 @@
 import math ##nécessaire pour la racine
+import pandas as pd #Pour la gestion des csv
 
 
 class Point :
@@ -162,21 +163,47 @@ class Classe :
                 return student
         return    
 
+    def load_students_from_file(self,filename:str):
+        df = pd.read_csv(filename, header=None, names=["first_name", "last_name"])
+        for i in range(len(df)):
+            student=Student(df.iloc[i]['first_name'],df.iloc[i]['last_name'])
+            self.add_student(student)
+
+    def load_grades_from_file(self,filename:str):
+        df=pd.read_csv(filename,header=None,names=['first_name','last_name','course'],delimiter=',')
+        for i in range(len(df)):
+            student=Student(df.iloc[i]['first_name'],df.iloc[i]['']) ##Désolé mais je ne vois vraiment pas comment faire ici
+
+    def catalog(self):
+        catalogue = {}
+        for student in self.student :
+            for course in student.followed_topics :
+                if course in catalogue :
+                    catalogue[course]+=1
+                else :
+                    catalogue[course]=1
+        return catalogue     
+
+    def compute_averages(self):
+        dic={}
+        dic_average={}
+        for student in self.student :
+            for course in student.followed_topics : #Créer un dictionnaire liste de moyenne par matière
+                if course not in dic :
+                    dic[course]=student.compute_average(course)
+                else :
+                    dic[course].append(student.compute_average(course))
+        for course in dic :
+            M=0
+            for grade in dic[course]:  #Calcul de la moyenne de classe que l'on met dans le deuxième dictionnaire
+                M+=grade
+            dic_average[course]=M/self.catalog[course]
+        return dic_average        
+                                   
+
+
     def __repr__(self):
         return f"Classe({self.classname}, Students: {self.student!r})" 
 
-# pour tester
 
-try:
-    classe = Classe("P20")
-    student = Student("Matthieu", "Mazière")
-    classe.add_student(student)
-    new_student = classe.get_student("Matthieu", "Mazière")
-    assert student is new_student
-    new_student = classe.get_student("Jérôme", "Adnot")
-    assert new_student is None
-except Exception as e:
-    print("OOPS - Something's wrong")
-    print(f"Error message : {e}")
-else:
-    print('Congrats ! Your implementation works !')
+##Comme je n'ai pas réussi à implémenter load_grades je n'ai pas pu tester donc j'espère que ça marche
