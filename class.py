@@ -198,7 +198,7 @@ class Classe :
             for grade in dic[course]:  #Calcul de la moyenne de classe que l'on met dans le deuxième dictionnaire
                 M+=grade
             dic_average[course]=M/self.catalog[course]
-        return dic_average        
+        return dic_average      ##Le programme est probablement peu efficace je le conçois  
                                    
 
 
